@@ -20,6 +20,7 @@ class CanvasPlayerControls extends videojs.EventTarget {
     this.onMoveEnd = videojs.bind(this, this.onMoveEnd);
     this.onMoveStart = videojs.bind(this, this.onMoveStart);
     this.onMove = videojs.bind(this, this.onMove);
+    this.onWheel = videojs.bind(this, this.onWheel);
     this.onControlBarMove = videojs.bind(this, this.onControlBarMove);
 
     this.player.controlBar.on([
@@ -45,6 +46,7 @@ class CanvasPlayerControls extends videojs.EventTarget {
     this.canvas.addEventListener('touchmove', this.onMove);
     this.canvas.addEventListener('mouseup', this.onMoveEnd);
     this.canvas.addEventListener('touchend', this.onMoveEnd);
+    this.canvas.addEventListener('wheel', this.onWheel);
 
     this.shouldTogglePlay = false;
   }
@@ -110,6 +112,13 @@ class CanvasPlayerControls extends videojs.EventTarget {
     this.shouldTogglePlay = false;
   }
 
+  onWheel(e) {
+    const isWheelUp = e.deltaY < 0;
+    const vr = this.player.vr()
+    vr.camera.fov = vr.camera.fov + (isWheelUp ? -10 : 10);
+    vr.camera.updateProjectionMatrix();
+  }
+
   onControlBarMove(e) {
     this.player.userActive(true);
   }
@@ -121,6 +130,7 @@ class CanvasPlayerControls extends videojs.EventTarget {
     this.canvas.removeEventListener('touchmove', this.onMove);
     this.canvas.removeEventListener('mouseup', this.onMoveEnd);
     this.canvas.removeEventListener('touchend', this.onMoveEnd);
+    this.canvas.removeEventListener('wheel', this.onWheel);
 
     this.player.controlBar.off([
       'mousedown',

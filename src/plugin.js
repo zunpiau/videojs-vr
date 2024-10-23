@@ -23,7 +23,8 @@ const defaults = {
   omnitoneOptions: {},
   projection: 'AUTO',
   sphereDetail: 32,
-  disableTogglePlay: false
+  disableTogglePlay: false,
+  fov: 75
 };
 
 const errors = {
@@ -612,7 +613,7 @@ void main() {
   init() {
     this.reset();
 
-    this.camera = new THREE.PerspectiveCamera(75, this.player_.currentWidth() / this.player_.currentHeight(), 1, 1000);
+    this.camera = new THREE.PerspectiveCamera(this.options_.fov, this.player_.currentWidth() / this.player_.currentHeight(), 1, 1000);
     // Store vector representing the direction in which the camera is looking, in world space.
     this.cameraVector = new THREE.Vector3();
 
